@@ -2,23 +2,75 @@
   "expo": {
     "name": "crave-app",
     "slug": "crave-app",
+    "scheme": "crave-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#1A1208",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.hridoyncs0464sorganization.craveapp"
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": ["expo-font", "expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "faea7080-555c-4119-8bff-6485e1695108"
+      }
+    },
+    "owner": "hridoyncs0464s-organization"
   }
 }
+
+// {
+//   "expo": {
+//     "name": "crave-app",
+//     "slug": "crave-app",
+//     "scheme": "crave-app",
+//     "version": "1.0.0",
+//     "orientation": "portrait",
+//     "icon": "./assets/icon.png",
+//     "userInterfaceStyle": "light",
+//     "ios": {
+//       "supportsTablet": true
+//     },
+//     "android": {
+//       "adaptiveIcon": {
+//         "backgroundColor": "#E6F4FE",
+//         "foregroundImage": "./assets/android-icon-foreground.png",
+//         "backgroundImage": "./assets/android-icon-background.png",
+//         "monochromeImage": "./assets/android-icon-monochrome.png"
+//       },
+//       "package": "com.hridoyncs0464sorganization.craveapp"
+//     },
+//     "web": {
+//       "favicon": "./assets/favicon.png"
+//     },
+//     "extra": {
+//       "eas": {
+//         "projectId": "faea7080-555c-4119-8bff-6485e1695108"
+//       }
+//     },
+//     "owner": "hridoyncs0464s-organization",
+//     "plugins": [
+//       "expo-font"
+//     ]
+//   }
+// }

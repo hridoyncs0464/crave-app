@@ -1,0 +1,119 @@
+import { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { COLORS, FONTS, SPACING, RADIUS } from '../../constants/theme';
+import { useAuth } from '../../context/AuthContext';
+
+export default function Register() {
+  const router = useRouter();
+  const { register, updateUserProfile } = useAuth();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleRegister = async () => {
+    if (!name || !email || !password) { setError('Please fill all fields'); return; }
+    if (password.length < 6) { setError('Password must be at least 6 characters'); return; }
+    setLoading(true);
+    setError('');
+    try {
+      await register(email, password);
+      await updateUserProfile(name, null);
+      router.replace('/(tabs)');
+    } catch (e) {
+      setError(e.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: COLORS.background }} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: SPACING.lg }}>
+
+      <View style={{ alignItems: 'center', marginBottom: 40 }}>
+        <Text style={{ fontSize: 48, marginBottom: 8 }}>🔥</Text>
+        <Text style={{ color: COLORS.primary, fontSize: FONTS.sizes.xxxl, fontWeight: '900', letterSpacing: 2 }}>CRAVE</Text>
+        <Text style={{ color: COLORS.textMuted, fontSize: FONTS.sizes.sm, marginTop: 4 }}>Create your account</Text>
+      </View>
+
+      <View style={{ backgroundColor: COLORS.surface, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.border, padding: SPACING.lg }}>
+
+        {error ? (
+          <View style={{ backgroundColor: COLORS.error + '20', borderRadius: RADIUS.sm, padding: 10, marginBottom: 16, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Ionicons name="alert-circle" size={16} color={COLORS.error} />
+            <Text style={{ color: COLORS.error, fontSize: FONTS.sizes.sm, flex: 1 }}>{error}</Text>
+          </View>
+        ) : null}
+
+        {/* Name */}
+        <Text style={{ color: COLORS.textMuted, fontSize: FONTS.sizes.xs, fontWeight: '600', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Full Name</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLight, borderRadius: RADIUS.sm, borderWidth: 1, borderColor: COLORS.border, marginBottom: 16, paddingHorizontal: 12 }}>
+          <Ionicons name="person-outline" size={18} color={COLORS.textMuted} />
+          <TextInput
+            value={name}
+            onChangeText={setName}
+            placeholder="Your full name"
+            placeholderTextColor={COLORS.textMuted}
+            style={{ flex: 1, color: COLORS.text, fontSize: FONTS.sizes.md, paddingVertical: 14, paddingLeft: 10 }}
+          />
+        </View>
+
+        {/* Email */}
+        <Text style={{ color: COLORS.textMuted, fontSize: FONTS.sizes.xs, fontWeight: '600', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Email</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLight, borderRadius: RADIUS.sm, borderWidth: 1, borderColor: COLORS.border, marginBottom: 16, paddingHorizontal: 12 }}>
+          <Ionicons name="mail-outline" size={18} color={COLORS.textMuted} />
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder="your@email.com"
+            placeholderTextColor={COLORS.textMuted}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={{ flex: 1, color: COLORS.text, fontSize: FONTS.sizes.md, paddingVertical: 14, paddingLeft: 10 }}
+          />
+        </View>
+
+        {/* Password */}
+        <Text style={{ color: COLORS.textMuted, fontSize: FONTS.sizes.xs, fontWeight: '600', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>Password</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLight, borderRadius: RADIUS.sm, borderWidth: 1, borderColor: COLORS.border, marginBottom: 24, paddingHorizontal: 12 }}>
+          <Ionicons name="lock-closed-outline" size={18} color={COLORS.textMuted} />
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Min 6 characters"
+            placeholderTextColor={COLORS.textMuted}
+            secureTextEntry={!showPass}
+            style={{ flex: 1, color: COLORS.text, fontSize: FONTS.sizes.md, paddingVertical: 14, paddingLeft: 10 }}
+          />
+          <TouchableOpacity onPress={() => setShowPass(!showPass)}>
+            <Ionicons name={showPass ? 'eye-off-outline' : 'eye-outline'} size={18} color={COLORS.textMuted} />
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          onPress={handleRegister}
+          disabled={loading}
+          style={{ backgroundColor: COLORS.primary, paddingVertical: 16, borderRadius: RADIUS.full, alignItems: 'center', justifyContent: 'center' }}
+        >
+          {loading
+            ? <ActivityIndicator color="#fff" />
+            : <Text style={{ color: '#fff', fontWeight: '900', fontSize: FONTS.sizes.lg }}>Create Account</Text>
+          }
+        </TouchableOpacity>
+
+      </View>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 24, gap: 6 }}>
+        <Text style={{ color: COLORS.textMuted, fontSize: FONTS.sizes.sm }}>Already have an account?</Text>
+        <TouchableOpacity onPress={() => router.push('/auth/login')}>
+          <Text style={{ color: COLORS.primary, fontWeight: '700', fontSize: FONTS.sizes.sm }}>Sign In</Text>
+        </TouchableOpacity>
+      </View>
+
+    </ScrollView>
+  );
+}
